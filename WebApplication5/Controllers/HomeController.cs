@@ -124,7 +124,7 @@ namespace WebApplication5.Controllers
         {
             pozition.ChangeCost(idPozition, cost);
         }
-
+        //+
         [HttpPost]
         public void ChangeFIO(int idOrder, string fio)
         {
