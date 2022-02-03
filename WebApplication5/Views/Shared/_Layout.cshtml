@@ -1,0 +1,201 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - приложение ASP.NET</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li>@Html.ActionLink("Домашняя страница", "Index", "Home")</li>
+                    <li>@Html.ActionLink("Информация", "About", "Home")</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - мое приложение ASP.NET</p>
+        </footer>
+    </div>
+    @*<script src="~/Scripts/jquery-3.4.1.js"></script>*@
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryDataTable")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>
+<script>
+    var DateFrom;
+    var DateTo;
+    var IDClickedOrder;
+    function Delete(ID) {
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("DeleteTable", "Home")",
+            data: {
+                ID: ID
+            },
+            success: function (response) {
+                $('#Order').DataTable().ajax.reload();
+            }
+        });
+    }
+
+    function DeletePozition(IDorder, IDpozition) {
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("DeletePozition", "Home")",
+            data: {
+                idOrder: IDorder,
+                idPozition: IDpozition
+            },
+            success: function (response) {
+                $('#Order').DataTable().ajax.reload();
+                var tablePozition = $('#Pozition').DataTable();
+                tablePozition.ajax.url("@Url.Action("LoadPozition", "Home")?id=" + IDorder).load();
+            }
+        });
+    }
+
+    function AddPozition(IDorder, IDpozition) {
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("AddPozition", "Home")",
+            data: {
+                idOrder: IDorder,
+                idPozition: IDpozition
+            },
+            success: function (response) {
+                $('#Order').DataTable().ajax.reload();
+                var tablePozition = $('#Pozition').DataTable();
+                //tablePozition.ajax.reload();
+                tablePozition.ajax.url("@Url.Action("LoadPozition", "Home")?id=" + IDorder).load();
+            }
+        });
+    }
+
+    $("#SaveEdit").click(function () {
+        var editID = $("#editID").val();
+        var editDate = $("#editDate").val();
+        var editFIO = $("#editFIO").val();
+        var editSumOrder = $("#editSumOrder").val();
+
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("SaveEdit", "Home")",
+            data: {
+                ID: editID,
+                DateOrder: editDate,
+                FIO: editFIO,
+                SumOrder: editSumOrder
+            },
+            success: function (response) {
+            }
+        });
+    });
+
+    function ChangeDateFrom(e) {
+        DateFrom = e.target.value;
+    }
+    function ChangeDateTo(e) {
+        DateTo = e.target.value;
+    }
+
+    //изменение ячеек в таб. #FreePozition
+    function ChangeNameProduct(idPozition) {
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("ChangeNameProduct", "Home")",
+            data: {
+                idPozition: idPozition,
+                nameProduct: $("#idFreePozitionNameProduct" + idPozition).val()
+            },
+            success: function (response) {
+                $('#Order').DataTable().ajax.reload();
+                var tablePozition = $('#Pozition').DataTable();
+                tablePozition.ajax.url("@Url.Action("LoadPozition", "Home")?id=" + IDClickedOrder).load();
+                $('#FreePozition').DataTable().ajax.reload();
+            }
+        });
+    }
+    function ChangePrice(idPozition) {
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("ChangePrice", "Home")",
+            data: {
+                idPozition: idPozition,
+                price: $("#idFreePozitionPrice" + idPozition).val()
+            },
+            success: function (response) {
+                $('#Order').DataTable().ajax.reload();
+                var tablePozition = $('#Pozition').DataTable();
+                tablePozition.ajax.url("@Url.Action("LoadPozition", "Home")?id=" + IDClickedOrder).load();
+                $('#FreePozition').DataTable().ajax.reload();
+            }
+        });
+    }
+    function ChangeNumberProduct(idPozition) {
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("ChangeNumberProduct", "Home")",
+            data: {
+                idPozition: idPozition,
+                numberProduct: $("#idFreePozitionNumberProduct" + idPozition).val()
+            },
+            success: function (response) {
+                $('#Order').DataTable().ajax.reload();
+                var tablePozition = $('#Pozition').DataTable();
+                tablePozition.ajax.url("@Url.Action("LoadPozition", "Home")?id=" + IDClickedOrder).load();
+                $('#FreePozition').DataTable().ajax.reload();
+            }
+        });
+    }
+    function ChangeCost(idPozition) {
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("ChangeCost", "Home")",
+            data: {
+                idPozition: idPozition,
+                cost: $("#idFreePozitionCost" + idPozition).val()
+            },
+            success: function (response) {
+                $('#Order').DataTable().ajax.reload();
+                var tablePozition = $('#Pozition').DataTable();
+                tablePozition.ajax.url("@Url.Action("LoadPozition", "Home")?id=" + IDClickedOrder).load();
+                $('#FreePozition').DataTable().ajax.reload();
+            }
+        });
+    }
+
+    //изменение FIO в таб. #Order
+    function ChangeFIO(idOrder) {
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("ChangeFIO", "Home")",
+            data: {
+                idOrder: idOrder,
+                fio: $("#idOrderFIO" + idOrder).val()
+            },
+            success: function (response) {
+                $('#Order').DataTable().ajax.reload();
+            }
+        });
+    }
+</script>
