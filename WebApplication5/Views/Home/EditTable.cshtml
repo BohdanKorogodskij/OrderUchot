@@ -84,7 +84,12 @@
                     "data": "NameProduct", "name": "Название товара", "autoWidth": true
                 },
                 { "data": "Price", "name": "Цена", "autoWidth": true },
-                { "data": "NumberProduct", "name": "Количество", "autoWidth": true },
+                {
+                    "data": "NumberProduct", "name": "Количество", "autoWidth": true,
+                    "render": function (data, type, full, meta) {
+                        return "<input id='idPozitionNumberProduct" + full.ID + "' onchange=ChangeNumberProduct('" + full.ID + "'); value='" + full.NumberProduct + "'></input>";
+                    }
+                },
                 { "data": "Cost", "name": "Стоимость", "autoWidth": true },
                 {
                     data: null,
@@ -94,9 +99,6 @@
                 },
             ]
         });
-
-
-
 
 
         $("#FreePozition").DataTable({
@@ -117,13 +119,13 @@
                 {
                     "data": "NameProduct", "name": "Название товара", "autoWidth": true,
                     "render": function (data, type, full, meta) {
-                        return "<input id='idFreePozitionNameProduct" + full.ID + "' onchange=ChangeNameProduct('" + full.ID + "'); value='" + full.NameProduct + "'></input>";
+                        return "<input id='idFreePozitionNameProduct" + full.ID + "' onchange=ChangeNameProduct('" + @Model.ID + "','" + full.ID + "'); value='" + full.NameProduct + "'></input>";
                     }
                 },
                 {
                     "data": "Price", "name": "Цена", "autoWidth": true,
                     "render": function (data, type, full, meta) {
-                        return "<input id='idFreePozitionPrice" + full.ID + "' onchange=ChangePrice('" + full.ID + "'); value='" + full.Price + "'></input>";
+                        return "<input id='idFreePozitionPrice" + full.ID + "' onchange=ChangePrice('" + @Model.ID + "','" + full.ID + "'); value='" + full.Price + "'></input>";
                     }
                 },
                 {
@@ -139,5 +141,7 @@
             tablePozition.ajax.url("@Url.Action("LoadPozition", "PozitionOrder")?id=" + @Model.ID).load();
         }
         LoadTable();
+
+
     })
 </script>
