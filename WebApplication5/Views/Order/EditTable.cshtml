@@ -1,0 +1,26 @@
+﻿@model WebApplication5.Infrastructure.Entity.OrderList
+
+@{
+    ViewBag.Title = "EditTable";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Изменение заказа</h2>
+<input id="editID" hidden value="@Model.ID">
+<p>Дата</p>
+<input id="editDate" type="date" value="@Model.DateOrder.ToString("yyyy-MM-dd")" />
+<br />
+<p>ФИО Клиента</p>
+<input id="editFIO" value="@Model.FIO" />
+<br>
+
+<button id="SaveEdit">Save</button>
+<div>
+    @Html.ActionLink("Back to List", "About")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryDataTable")
+    @Scripts.Render("~/bundles/jqueryval")
+}

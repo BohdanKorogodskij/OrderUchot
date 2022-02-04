@@ -137,15 +137,17 @@
     <Compile Include="App_Start\NinjectWebCommon.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\PozitionOrderController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Infrastructure\Abstract\IPozition.cs" />
-    <Compile Include="Infrastructure\Abstract\ITable.cs" />
-    <Compile Include="Infrastructure\Concrete\Pozition.cs" />
-    <Compile Include="Infrastructure\Concrete\Table.cs" />
-    <Compile Include="Infrastructure\Entity\OrderList.cs" />
-    <Compile Include="Infrastructure\Entity\PozitionOrder.cs" />
+    <Compile Include="Infrastructure\Abstract\IPozitionOr.cs" />
+    <Compile Include="Infrastructure\Abstract\IOrder.cs" />
+    <Compile Include="Infrastructure\Concrete\PozitionOr.cs" />
+    <Compile Include="Infrastructure\Concrete\OrderTable.cs" />
+    <Compile Include="Infrastructure\Entity\Order.cs" />
+    <Compile Include="Infrastructure\Entity\Pozition.cs" />
+    <Compile Include="Infrastructure\Entity\PozitionFree.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -417,13 +419,13 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\About.cshtml" />
-    <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Home\EditTable.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Models\" />
+    <Folder Include="Views\PozitionOrder\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

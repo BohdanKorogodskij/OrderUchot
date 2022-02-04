@@ -11,13 +11,13 @@ using System.Data;
 
 namespace WebApplication5.Infrastructure.Concrete
 {
-    public class Table : ITable
+    public class OrderTable : IOrder
     {
         private readonly string connectionString = ConfigurationManager.ConnectionStrings["Dbconnection"].ConnectionString;
 
-        public IEnumerable<OrderList> GetListTable()
+        public IEnumerable<Order> GetListTable()
         {
-            IEnumerable<OrderList> result = Enumerable.Empty<OrderList>();
+            var result = Enumerable.Empty<Order>();
             try
             {
                 using (var connection = new SqlConnection(connectionString))
@@ -44,7 +44,7 @@ namespace WebApplication5.Infrastructure.Concrete
                         {
                             while(read.Read())
                             {
-                                var obj = new OrderList
+                                var obj = new Order
                                 { 
                                     ID = read.GetInt32(0),
                                     DateOrder = read.GetDateTime(1),
@@ -63,7 +63,7 @@ namespace WebApplication5.Infrastructure.Concrete
             return result;
         }
 
-        public void Add(OrderList order)
+        public void Add(Entity.Order order)
         {
             try
             {
@@ -107,7 +107,7 @@ namespace WebApplication5.Infrastructure.Concrete
             }
         }
 
-        public void Edit(OrderList order)
+        public void Edit(Entity.Order order)
         {
             try
             {
@@ -131,9 +131,9 @@ namespace WebApplication5.Infrastructure.Concrete
             }
         }
 
-        public OrderList GetOrder(int id)
+        public Entity.Order GetOrder(int id)
         {
-            IEnumerable<OrderList> result = Enumerable.Empty<OrderList>();
+            IEnumerable<Order> result = Enumerable.Empty<Order>();
             try
             {
                 using (var connection = new SqlConnection(connectionString))
@@ -161,7 +161,7 @@ namespace WebApplication5.Infrastructure.Concrete
                         {
                             while (read.Read())
                             {
-                                var obj = new OrderList
+                                var obj = new Order
                                 {
                                     ID = read.GetInt32(0),
                                     DateOrder = read.GetDateTime(1),
@@ -181,9 +181,9 @@ namespace WebApplication5.Infrastructure.Concrete
             return result.First();
         }
 
-        public IEnumerable<OrderList> GetPeriod(DateTime from, DateTime to)
+        public IEnumerable<Order> GetPeriod(DateTime from, DateTime to)
         {
-            IEnumerable<OrderList> result = Enumerable.Empty<OrderList>();
+            IEnumerable<Order> result = Enumerable.Empty<Order>();
             try
             {
                 using (var connection = new SqlConnection(connectionString))
@@ -210,7 +210,7 @@ namespace WebApplication5.Infrastructure.Concrete
                         {
                             while(read.Read())
                             {
-                                var obj = new OrderList
+                                var obj = new Order
                                 {
                                     ID = read.GetInt32(0),
                                     DateOrder = read.GetDateTime(1),

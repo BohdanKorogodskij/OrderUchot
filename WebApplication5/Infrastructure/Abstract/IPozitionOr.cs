@@ -7,11 +7,11 @@ using WebApplication5.Infrastructure.Entity;
 
 namespace WebApplication5.Infrastructure.Abstract
 {
-    public interface IPozition
+    public interface IPozitionOr
     {
-        IEnumerable<PozitionOrder> GetPozition(int id);
+        IEnumerable<Pozition> GetPozition(int id);
         void DeletePozition(int idOrder, int idPozition);
-        IEnumerable<PozitionOrder> GetFreePozition();
+        IEnumerable<PozitionFree> GetFreePozition();
         void AddPozition(int idOrder, int idPozition);
         void ChangeNameProduct(int idPozition, string nameProduct);
         void ChangePrice(int idPozition, double price);

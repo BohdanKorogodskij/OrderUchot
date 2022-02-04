@@ -8,11 +8,12 @@ using WebApplication5.Infrastructure.Entity;
 
 namespace WebApplication5.Controllers
 {
-    public class HomeController : Controller
+    public class OrderController : Controller
     {
-        private readonly IOrder table;
+        private readonly ITable table;
+        
 
-        public HomeController(IOrder table)
+        public OrderController(ITable table)
         {
             this.table = table;
         }
@@ -31,7 +32,7 @@ namespace WebApplication5.Controllers
         [HttpPost]
         public ActionResult LoadTable(DateTime? from, DateTime? to)
         {
-            IEnumerable<Order> result = Enumerable.Empty<Order>();
+            IEnumerable<OrderList> result = Enumerable.Empty<OrderList>();
             if(from.HasValue && to.HasValue)
             {
                 result = table.GetPeriod(from.Value, to.Value);
@@ -46,7 +47,7 @@ namespace WebApplication5.Controllers
         [HttpGet]
         public ActionResult EditTable(int id)
         {
-            Order order = table.GetOrder(id);
+            OrderList order = table.GetOrder(id);
             return View(order);
         }
 
@@ -57,13 +58,13 @@ namespace WebApplication5.Controllers
         }
 
         [HttpPost]
-        public void SaveEdit(Order order)
+        public void SaveEdit(OrderList order)
         {
             table.Edit(order);
         }
 
         [HttpPost]
-        public void Add(Order order)
+        public void Add(OrderList order)
         {
             table.Add(order);
         }

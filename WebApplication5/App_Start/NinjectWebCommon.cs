@@ -63,8 +63,8 @@ namespace WebApplication5.App_Start
         /// <param name="kernel">The kernel.</param>
         private static void RegisterServices(IKernel kernel)
         {
-            kernel.Bind<ITable>().To<Table>();
-            kernel.Bind<IPozition>().To<Pozition>();
+            kernel.Bind<IOrder>().To<OrderTable>();
+            kernel.Bind<IPozitionOr>().To<PozitionOr>();
         }        
     }
 }

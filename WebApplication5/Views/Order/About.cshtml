@@ -1,0 +1,269 @@
+﻿@{
+    ViewBag.Title = "About";
+}
+<br>
+<h3>Добавление нового заказа</h3>
+<br>
+<p>Дата</p>
+<input id="addDate" type="date" value="" />
+<br />
+<p>ФИО Клиента</p>
+<input id="addFIO" value="" />
+<br>
+@*<p>общая сумма заказа</p>
+<input id="addSumOrder" value="" />*@
+<br>
+
+<button id="Add">Add</button>
+
+
+<h3>Отобрать заказы по периоду</h3>
+<p>ОТ:</p>
+<input id="DateFrom" type="date" value="" onchange="ChangeDateFrom(event)" />
+<p>ДО:</p>
+<input id="DateTo" type="date" value="" onchange="ChangeDateTo(event)" />
+<br>
+<button id="Filter">Filter</button>
+<br>
+<h3>Заказы</h3>
+<br>
+<table id="Order">
+    <thead>
+        <tr>
+            <th>Дата</th>
+            <th>Номер</th>
+            <th>ФИО Клиента</th>
+            <th>общая сумма заказа</th>
+            <th>Edit</th>
+            <th>Delete</th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+
+<h3>Позиции заказа</h3>
+
+<br>
+<table id="Pozition">
+    <thead>
+        <tr>
+            <th>Айди</th>
+            <th>Название товара</th>
+            <th>Цена</th>
+            <th>Количество</th>
+            <th>Стоимость</th>
+            <th>Delete</th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+
+<br>
+<br>
+<h3>Справочник товаров</h3>
+
+<br>
+<table id="FreePozition">
+    <thead>
+        <tr>
+            <th>Айди</th>
+            <th>Название товара</th>
+            <th>Цена</th>
+            @*<th>Количество</th>
+            <th>Стоимость</th>*@
+            <th>Add</th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+
+@Scripts.Render("~/bundles/jquery")
+@*@Scripts.Render("~/bundles/jqueryDataTable")*@
+<script type="text/javascript">
+    $(function () {
+
+        function ConvertToDate(data) {
+            var milli = data.replace(/\/Date\((-?\d+)\)\//, '$1');
+            var d = new Date(parseInt(milli));
+
+            var datestring = d.getDate() + "-" + (d.getMonth() + 1) + "-" + d.getFullYear();
+            return datestring;
+        }
+
+        var tableOrder = $("#Order").DataTable({
+            processing: true,
+            serverSide: true,
+            filter: true,
+            orderMulti: false,
+            bPaginate: false,
+            bFilter: false,
+            "ajax": {
+                "url": "@Url.Action("LoadTable", "Order")",
+                "type": "POST",
+                "dataType": "json",
+            },
+            "columns": [
+                {
+                    "data": "DateOrder", "name": "Дата", "autoWidth": true,
+                    "render": function (data, row) {
+                        return ConvertToDate(data);
+                    }
+                },
+                { "data": "ID", "name": "Номер", "autoWidth": true },
+                {
+                    "data": "FIO", "name": "ФИО Клиента", "autoWidth": true,
+                    "render": function (data, type, full, meta) {
+                        return "<input id='idOrderFIO" + full.ID + "' onchange=ChangeFIO('" + full.ID + "'); value='" + full.FIO + "'></input>";
+                    }
+                },
+                { "data": "SumOrder", "name": "общая сумма заказа", "autoWidth": true },
+                {
+                    "render": function (data, type, full, meta) {
+                        return '<a class="btn btn-info" href="'+'@Url.Action("EditTable", "Order")/' + full.ID + '">Изменить</a>';
+                    }
+                },
+                {
+                    data: null,
+                    render: function (data, type, row) {
+                        return "<a href='#' class='btn btn-danger' onclick=Delete('" + row.ID + "'); >Удалить</a>";
+                    }
+                },
+            ]
+        });
+        $("#Order tbody").on('click', 'tr', function () {
+            var data = tableOrder.row(this).data();
+            IDClickedOrder = data.ID;
+            var tablePozition = $("#Pozition").DataTable();
+            tablePozition.ajax.url("@Url.Action("LoadPozition", "Pozition")?id=" + data.ID).load();
+            $('#FreePozition').DataTable().ajax.reload();
+        });
+
+        $("#Add").click(function () {
+            //сделать вьюшку
+            var addDate = $("#addDate").val();
+            var addFIO = $("#addFIO").val();
+            //var addSumOrder = $("#addSumOrder").val();
+
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("Add", "Order")",
+                data: {
+                    DateOrder: addDate,
+                    FIO: addFIO,
+                    SumOrder: 0
+                },
+                success: function (response) {
+                    //$('#Order').DataTable().ajax.reload();
+                    var table = $('#Order').DataTable();
+                    table.ajax.url("@Url.Action("LoadTable", "Order")").load();
+                }
+            });
+        });
+
+
+        $("#Filter").click(function () {
+            var table = $("#Order").DataTable();
+            table.ajax.url("@Url.Action("LoadTable", "Order")?from=" + DateFrom + "&to=" + DateTo).load();
+        });
+
+
+
+
+
+
+
+        $("#Pozition").DataTable({
+            processing: true,
+            serverSide: true,
+            orderMulti: false,
+            bPaginate: false,
+            bFilter: false,
+            "ajax": {
+                "url": "@Url.Action("LoadPozition", "Pozition")",
+                "type": "POST",
+                "dataType": "json",
+            },
+            "columns": [
+                {
+                    "data": "ID", "name": "Айди", "visible": false, "autoWidth": true
+                },
+                {
+                    "data": "NameProduct", "name": "Название товара", "autoWidth": true
+                },
+                { "data": "Price", "name": "Цена", "autoWidth": true },
+                { "data": "NumberProduct", "name": "Количество", "autoWidth": true },
+                { "data": "Cost", "name": "Стоимость", "autoWidth": true },
+
+                @*{
+                    "render": function (data, type, full, meta) {
+                        return '<a class="btn btn-info" href="'+'@Url.Action("EditTable", "Home")/' + full.ID + '">Edit</a>';
+                    }
+                },*@
+                {
+                    data: null,
+                    render: function (data, type, row) {
+                        return "<a href='#' class='btn btn-danger' onclick=DeletePozition('" + IDClickedOrder + "','" + row.ID + "'); >Удалить</a>";
+                    }
+                },
+            ]
+        });
+
+
+
+
+
+        $("#FreePozition").DataTable({
+            processing: true,
+            serverSide: true,
+            orderMulti: false,
+            bPaginate: false,
+            bFilter: false,
+            "ajax": {
+                "url": "@Url.Action("LoadAllPozition", "Pozition")",
+                "type": "POST",
+                "dataType": "json",
+            },
+            "columns": [
+                {
+                    "data": "ID", "name": "Айди", "visible": false, "autoWidth": true
+                },
+                {
+                    "data": "NameProduct", "name": "Название товара", "autoWidth": true,
+                    "render": function (data, type, full, meta) {
+                        return "<input id='idFreePozitionNameProduct" + full.ID + "' onchange=ChangeNameProduct('" + full.ID + "'); value='" + full.NameProduct + "'></input>";
+                    }
+                },
+                {
+                    "data": "Price", "name": "Цена", "autoWidth": true,
+                    "render": function (data, type, full, meta) {
+                        return "<input id='idFreePozitionPrice" + full.ID + "' onchange=ChangePrice('" + full.ID + "'); value='" + full.Price + "'></input>";
+                    }
+                },
+                //{
+                //    "data": "NumberProduct", "name": "Количество", "autoWidth": true,
+                //    "render": function (data, type, full, meta) {
+                //        return "<input id='idFreePozitionNumberProduct" + full.ID + "' onchange=ChangeNumberProduct('" + full.ID + "'); value='" + full.NumberProduct + "'></input>";
+                //    }
+                //},
+                //{
+                //    "data": "Cost", "name": "Стоимость", "autoWidth": true,
+                //    "render": function (data, type, full, meta) {
+                //        return "<input id='idFreePozitionCost" + full.ID + "' onchange=ChangeCost('" + full.ID + "'); value='" + full.Cost + "'></input>";
+                //    }
+                //},
+
+
+                {
+                    data: null,
+                    render: function (data, type, row) {
+                        return "<a href='#' class='btn btn-success' onclick=AddPozition('" + IDClickedOrder + "','" + row.ID + "'); >Добавить</a>";
+                    }
+                },
+            ]
+        });
+
+    })
+</script>

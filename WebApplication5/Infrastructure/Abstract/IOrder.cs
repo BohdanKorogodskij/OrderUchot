@@ -7,14 +7,14 @@ using WebApplication5.Infrastructure.Entity;
 
 namespace WebApplication5.Infrastructure.Abstract
 {
-    public interface ITable
+    public interface IOrder
     {
-        IEnumerable<OrderList> GetListTable();
-        void Add(OrderList order);
+        IEnumerable<Order> GetListTable();
+        void Add(Order order);
         void Delete(int id);
-        void Edit(OrderList order);
-        OrderList GetOrder(int id);
-        IEnumerable<OrderList> GetPeriod(DateTime from, DateTime to);
+        void Edit(Order order);
+        Order GetOrder(int id);
+        IEnumerable<Order> GetPeriod(DateTime from, DateTime to);
         void ChangeFIO(int idOrder, string fio);
     }
 }

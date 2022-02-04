@@ -1,9 +1,12 @@
-﻿@model WebApplication5.Infrastructure.Entity.OrderList
+﻿@model WebApplication5.Infrastructure.Entity.Order
 
 @{
     ViewBag.Title = "EditTable";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/jqueryDataTable")
+@Scripts.Render("~/bundles/jqueryval")
 
 <h2>Изменение заказа</h2>
 <input id="editID" hidden value="@Model.ID">
@@ -15,12 +18,126 @@
 <br>
 
 <button id="SaveEdit">Save</button>
+
+<br />
+<br />
+<h3>Позиции заказа</h3>
+
+<br>
+<table id="Pozition">
+    <thead>
+        <tr>
+            <th>Айди</th>
+            <th>Название товара</th>
+            <th>Цена</th>
+            <th>Количество</th>
+            <th>Стоимость</th>
+            <th>Delete</th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+
+<br>
+<br>
+<h3>Справочник товаров</h3>
+
+<br>
+<table id="FreePozition">
+    <thead>
+        <tr>
+            <th>Айди</th>
+            <th>Название товара</th>
+            <th>Цена</th>
+            <th>Add</th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+<br />
+<br />
+
 <div>
     @Html.ActionLink("Back to List", "About")
 </div>
 
-@section Scripts {
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/jqueryDataTable")
-    @Scripts.Render("~/bundles/jqueryval")
-}
+<script>
+    $(function () {
+        $("#Pozition").DataTable({
+            processing: true,
+            serverSide: true,
+            orderMulti: false,
+            bPaginate: false,
+            bFilter: false,
+            "ajax": {
+                "url": "@Url.Action("LoadPozition", "PozitionOrder")",
+                "type": "POST",
+                "dataType": "json",
+            },
+            "columns": [
+                {
+                    "data": "ID", "name": "Айди", "visible": false, "autoWidth": true
+                },
+                {
+                    "data": "NameProduct", "name": "Название товара", "autoWidth": true
+                },
+                { "data": "Price", "name": "Цена", "autoWidth": true },
+                { "data": "NumberProduct", "name": "Количество", "autoWidth": true },
+                { "data": "Cost", "name": "Стоимость", "autoWidth": true },
+                {
+                    data: null,
+                    render: function (data, type, row) {
+                        return "<a href='#' class='btn btn-danger' onclick=DeletePozition('" + @Model.ID + "','" + row.ID + "'); >Удалить</a>";
+                    }
+                },
+            ]
+        });
+
+
+
+
+
+        $("#FreePozition").DataTable({
+            processing: true,
+            serverSide: true,
+            orderMulti: false,
+            bPaginate: false,
+            bFilter: false,
+            "ajax": {
+                "url": "@Url.Action("LoadAllPozition", "PozitionOrder")",
+                "type": "POST",
+                "dataType": "json",
+            },
+            "columns": [
+                {
+                    "data": "ID", "name": "Айди", "visible": false, "autoWidth": true
+                },
+                {
+                    "data": "NameProduct", "name": "Название товара", "autoWidth": true,
+                    "render": function (data, type, full, meta) {
+                        return "<input id='idFreePozitionNameProduct" + full.ID + "' onchange=ChangeNameProduct('" + full.ID + "'); value='" + full.NameProduct + "'></input>";
+                    }
+                },
+                {
+                    "data": "Price", "name": "Цена", "autoWidth": true,
+                    "render": function (data, type, full, meta) {
+                        return "<input id='idFreePozitionPrice" + full.ID + "' onchange=ChangePrice('" + full.ID + "'); value='" + full.Price + "'></input>";
+                    }
+                },
+                {
+                    data: null,
+                    render: function (data, type, row) {
+                        return "<a href='#' class='btn btn-success' onclick=AddPozition('" + @Model.ID + "','" + row.ID + "'); >Добавить</a>";
+                    }
+                },
+            ]
+        });
+        function LoadTable() {
+            var tablePozition = $("#Pozition").DataTable();
+            tablePozition.ajax.url("@Url.Action("LoadPozition", "PozitionOrder")?id=" + @Model.ID).load();
+        }
+        LoadTable();
+    })
+</script>

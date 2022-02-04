@@ -5,11 +5,10 @@ using System.Web;
 
 namespace WebApplication5.Infrastructure.Entity
 {
-    public class OrderList
+    public class FreePozitionOrder
     {
         public int ID { get; set; }
-        public DateTime DateOrder { get; set; }
-        public string FIO { get; set; }
-        public double SumOrder { get; set; }
+        public string NameProduct { get; set; }
+        public decimal Price { get; set; }
     }
 }

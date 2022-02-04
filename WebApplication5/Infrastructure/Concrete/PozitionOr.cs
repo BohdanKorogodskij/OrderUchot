@@ -10,12 +10,12 @@ using WebApplication5.Infrastructure.Entity;
 
 namespace WebApplication5.Infrastructure.Concrete
 {
-    public class Pozition : IPozition
+    public class PozitionOr : IPozitionOr
     {
         private readonly string connectionString = ConfigurationManager.ConnectionStrings["Dbconnection"].ConnectionString;
-        public IEnumerable<PozitionOrder> GetPozition(int id)
+        public IEnumerable<Pozition> GetPozition(int id)
         {
-            IEnumerable<PozitionOrder> result = Enumerable.Empty<PozitionOrder>();
+            var result = Enumerable.Empty<Pozition>();
             try
             {
                 using (var connection = new SqlConnection(connectionString))
@@ -41,7 +41,7 @@ namespace WebApplication5.Infrastructure.Concrete
                         {
                             while(read.Read())
                             {
-                                var obj = new PozitionOrder
+                                var obj = new Pozition
                                 {
                                     ID = read.GetInt32(0),
                                     NameProduct = read.GetString(1),
@@ -84,9 +84,9 @@ namespace WebApplication5.Infrastructure.Concrete
             }
         }
 
-        public IEnumerable<PozitionOrder> GetFreePozition()
+        public IEnumerable<PozitionFree> GetFreePozition()
         {
-            IEnumerable<PozitionOrder> result = Enumerable.Empty<PozitionOrder>();
+            var result = Enumerable.Empty<PozitionFree>();
             try
             {
                 using (var connection = new SqlConnection(connectionString))
@@ -96,9 +96,7 @@ namespace WebApplication5.Infrastructure.Concrete
                             SELECT 
                                 pozition.ID, 
                                 pozition.NameProduct, 
-                                pozition.Price, 
-                                pozition.NumberProduct, 
-                                pozition.Cost 
+                                pozition.Price
                             FROM PozitionOrder pozition
                         ";
                     using (var command = new SqlCommand(string.Empty, connection))
@@ -110,13 +108,11 @@ namespace WebApplication5.Infrastructure.Concrete
                         {
                             while (read.Read())
                             {
-                                var obj = new PozitionOrder
+                                var obj = new PozitionFree
                                 {
                                     ID = read.GetInt32(0),
                                     NameProduct = read.GetString(1),
-                                    Price = read.GetDecimal(2),
-                                    NumberProduct = read.GetInt32(3),
-                                    Cost = read.GetDecimal(4)
+                                    Price = read.GetDecimal(2)
                                 };
                                 result = result.Concat(new[] { obj });
                             }
