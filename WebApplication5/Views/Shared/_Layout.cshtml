@@ -155,7 +155,8 @@
             url: "@Url.Action("ChangePrice", "PozitionOrder")",
             data: {
                 idPozition: idPozition,
-                price: $("#idFreePozitionPrice" + idPozition).val()
+                price: $("#idFreePozitionPrice" + idPozition).val(),
+                idOrder: idOrder
             },
             success: function (response) {
                 $('#Order').DataTable().ajax.reload();

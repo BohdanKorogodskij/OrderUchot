@@ -55,15 +55,18 @@ namespace WebApplication5.Controllers
         }
 
         [HttpPost]
-        public void ChangePrice(int idPozition, double price)
+        public void ChangePrice(int idPozition, double price, int idOrder)
         {
             pozition.ChangePrice(idPozition, price);
+            pozition.CalculatePrice(idOrder);
+            pozition.CalculateCostOrder(idOrder);
         }
 
         [HttpPost]
         public void ChangeNumberProduct(int idPozition, int numberProduct, int idOrder)
         {
             pozition.ChangeNumberProduct(idPozition, numberProduct, idOrder);
+            pozition.CalculateCost(idPozition, idOrder);
         }
 
         [HttpPost]

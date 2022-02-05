@@ -173,7 +173,66 @@ namespace WebApplication5.Infrastructure.Concrete
 
             }
         }
+        public void CalculatePrice(int idOrder)
+        {
+            try
+            {
+                using (var connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+                    string query = $@"UPDATE pozOrder SET Cost = ISNULL(pozOrder.NumberProduct * poz.Price, 0)
+                                       FROM PozitionOrder pozOrder
+                                       LEFT JOIN Pozition poz ON pozOrder.IDpozition = poz.ID
+                                       WHERE pozOrder.IDorder = {idOrder}
+                                    ";
+                    using (var command = new SqlCommand(string.Empty, connection))
+                    {
+                        command.CommandType = CommandType.Text;
+                        command.CommandText = query;
+                        command.CommandTimeout = int.MaxValue;
+                        var result = command.ExecuteNonQuery();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
 
+            }
+        }
+        public void CalculateCostOrder(int idOrder)
+        {
+            try
+            {
+                using (var connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+                    string query = $@"
+
+                                    DECLARE @CostOrder MONEY
+	                                    SELECT
+	                                    @CostOrder = ISNULL(SUM(pozOrder.Cost), 0)
+	                                    FROM OrderList list
+	                                    LEFT JOIN PozitionORder pozOrder ON list.ID = pozOrder.IDorder
+	                                    WHERE list.ID = {idOrder}
+
+                                    UPDATE list SET CostOrder = @CostOrder
+                                       FROM OrderList list
+                                       WHERE list.ID = {idOrder}
+                                    ";
+                    using (var command = new SqlCommand(string.Empty, connection))
+                    {
+                        command.CommandType = CommandType.Text;
+                        command.CommandText = query;
+                        command.CommandTimeout = int.MaxValue;
+                        var result = command.ExecuteNonQuery();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
         public void ChangePrice(int idPozition, double price)
         {
             try
@@ -183,7 +242,8 @@ namespace WebApplication5.Infrastructure.Concrete
                     connection.Open();
                     string query = $@"UPDATE pozition SET Price = {price}
                                         FROM [Pozition] pozition
-                                            WHERE ID = {idPozition}";
+                                            WHERE ID = {idPozition}
+                                    ";
                     using (var command = new SqlCommand(string.Empty, connection))
                     {
                         command.CommandType = CommandType.Text;
@@ -197,7 +257,48 @@ namespace WebApplication5.Infrastructure.Concrete
 
             }
         }
+        public void CalculateCost(int idPozition, int idOrder)
+        {
+            try
+            {
+                using (var connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+                    string query = $@"
+                                    DECLARE @Cost MONEY,
+		                                    @CostOrder MONEY
 
+		                                    SELECT 
+			                                    @Cost = poz.Price * pozOrder.NumberProduct
+			                                FROM PozitionOrder pozOrder
+			                                LEFT JOIN Pozition poz ON pozOrder.IDpozition = poz.ID
+			                                    WHERE pozOrder.ID = {idPozition}
+
+                                    UPDATE poz SET Cost = @Cost FROM PozitionOrder poz WHERE ID = {idPozition}
+
+                                            SELECT 
+			                                    @CostOrder = ISNULL(SUM(pozOrder.Cost), 0)
+			                                FROM PozitionOrder pozOrder
+			                                LEFT JOIN OrderList list ON pozOrder.IDorder = list.ID
+			                                    WHERE list.ID = {idOrder}
+
+                                    UPDATE pozOrder SET CostOrder = @CostOrder FROM OrderList pozOrder WHERE ID = {idOrder}
+                                    ";
+                    using (var command = new SqlCommand(string.Empty, connection))
+                    {
+                        command.CommandType = CommandType.Text;
+                        command.CommandText = query;
+                        command.CommandTimeout = int.MaxValue;
+                        var result = command.ExecuteNonQuery();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+        
         public void ChangeNumberProduct(int idPozition, int numberProduct, int idOrder)
         {
             try

@@ -17,5 +17,8 @@ namespace WebApplication5.Infrastructure.Abstract
         void ChangePrice(int idPozition, double price);
         void ChangeNumberProduct(int idPozition, int numberProduct, int idOrder);
         void ChangeCost(int idPozition, double cost);
+        void CalculateCost(int idPozition, int idOrder);
+        void CalculatePrice(int idOrder);
+        void CalculateCostOrder(int idOrder);
     }
 }
