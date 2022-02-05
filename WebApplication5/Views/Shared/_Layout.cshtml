@@ -171,7 +171,8 @@
             url: "@Url.Action("ChangeNumberProduct", "PozitionOrder")",
             data: {
                 idPozition: idPozition,
-                numberProduct: $("#idPozitionNumberProduct" + idPozition).val()
+                numberProduct: $("#idPozitionNumberProduct" + idPozition).val(),
+                idOrder: idOrder
             },
             success: function (response) {
                 /*$('#Order').DataTable().ajax.reload();*/

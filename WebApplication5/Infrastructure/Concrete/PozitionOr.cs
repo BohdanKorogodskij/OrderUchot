@@ -134,7 +134,7 @@ namespace WebApplication5.Infrastructure.Concrete
                 using (var connection = new SqlConnection(connectionString))
                 {
                     connection.Open();
-                    string query = $"INSERT INTO [Linker] (IDorderList, IDpozitionOrder) VALUES({idOrder}, {idPozition})";
+                    string query = $"INSERT INTO [PozitionOrder] (IDorder, IDpozition, NumberProduct, Cost) VALUES({idOrder}, {idPozition}, 0, 0)";
                     using (var command = new SqlCommand(string.Empty, connection))
                     {
                         command.CommandType = CommandType.Text;
@@ -158,7 +158,7 @@ namespace WebApplication5.Infrastructure.Concrete
                 {
                     connection.Open();
                     string query = $@"UPDATE pozition SET NameProduct = '{nameProduct}'
-                                        FROM [PozitionOrder] pozition
+                                        FROM [Pozition] pozition
                                             WHERE ID = {idPozition}";
                     using (var command = new SqlCommand(string.Empty, connection))
                     {
@@ -182,7 +182,7 @@ namespace WebApplication5.Infrastructure.Concrete
                 {
                     connection.Open();
                     string query = $@"UPDATE pozition SET Price = {price}
-                                        FROM [PozitionOrder] pozition
+                                        FROM [Pozition] pozition
                                             WHERE ID = {idPozition}";
                     using (var command = new SqlCommand(string.Empty, connection))
                     {
@@ -198,7 +198,7 @@ namespace WebApplication5.Infrastructure.Concrete
             }
         }
 
-        public void ChangeNumberProduct(int idPozition, int numberProduct)
+        public void ChangeNumberProduct(int idPozition, int numberProduct, int idOrder)
         {
             try
             {
@@ -207,7 +207,29 @@ namespace WebApplication5.Infrastructure.Concrete
                     connection.Open();
                     string query = $@"UPDATE pozition SET NumberProduct = {numberProduct}
                                          FROM [PozitionOrder] pozition
-                                            WHERE ID = {idPozition}";
+                                            WHERE ID = {idPozition}
+
+
+
+                                    declare @Cost money,
+		                                    @CostOrder money
+
+		                                    select 
+			                                    @Cost = poz.Price * pozOrder.NumberProduct
+			                                    from PozitionOrder pozOrder
+			                                    left join Pozition poz ON pozOrder.IDpozition = poz.ID
+			                                    where pozOrder.ID = {idPozition}
+
+                                    update poz set Cost = @Cost from PozitionOrder poz Where ID = {idPozition}
+
+                                            select 
+			                                    @CostOrder = ISNULL(SUM(pozOrder.Cost), 0)
+			                                    from PozitionOrder pozOrder
+			                                    left join OrderList list ON pozOrder.IDorder = list.ID
+			                                    where list.ID = {idOrder}
+
+                                    update pozOrder SEt CostOrder = @CostOrder from OrderList pozOrder where ID = {idOrder}
+                                    ";
                     using (var command = new SqlCommand(string.Empty, connection))
                     {
                         command.CommandType = CommandType.Text;

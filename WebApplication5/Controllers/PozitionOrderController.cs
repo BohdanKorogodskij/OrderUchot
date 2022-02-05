@@ -61,9 +61,9 @@ namespace WebApplication5.Controllers
         }
 
         [HttpPost]
-        public void ChangeNumberProduct(int idPozition, int numberProduct)
+        public void ChangeNumberProduct(int idPozition, int numberProduct, int idOrder)
         {
-            pozition.ChangeNumberProduct(idPozition, numberProduct);
+            pozition.ChangeNumberProduct(idPozition, numberProduct, idOrder);
         }
 
         [HttpPost]
