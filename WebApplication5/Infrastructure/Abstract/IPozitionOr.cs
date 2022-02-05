@@ -9,8 +9,8 @@ namespace WebApplication5.Infrastructure.Abstract
 {
     public interface IPozitionOr
     {
-        IEnumerable<Pozition> GetPozition(int id);
-        void DeletePozition(int idOrder, int idPozition);
+        IEnumerable<PozitionOrder> GetPozition(int id);
+        void DeletePozition(int id);
         IEnumerable<PozitionFree> GetFreePozition();
         void AddPozition(int idOrder, int idPozition);
         void ChangeNameProduct(int idPozition, string nameProduct);

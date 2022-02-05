@@ -119,7 +119,7 @@
                         return "<input id='idOrderFIO" + full.ID + "' onchange=ChangeFIO('" + full.ID + "'); value='" + full.FIO + "'></input>";
                     }
                 },
-                { "data": "SumOrder", "name": "общая сумма заказа", "autoWidth": true },
+                { "data": "CostOrder", "name": "общая сумма заказа", "autoWidth": true },
                 {
                     "render": function (data, type, full, meta) {
                         return '<a class="btn btn-info" href="' + '@Url.Action("EditTable", "Home")/' + full.ID + '">Редактирование</a>';

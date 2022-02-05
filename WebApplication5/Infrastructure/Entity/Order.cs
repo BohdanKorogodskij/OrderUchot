@@ -10,6 +10,6 @@ namespace WebApplication5.Infrastructure.Entity
         public int ID { get; set; }
         public DateTime DateOrder { get; set; }
         public string FIO { get; set; }
-        public double SumOrder { get; set; }
+        public double CostOrder { get; set; }
     }
 }

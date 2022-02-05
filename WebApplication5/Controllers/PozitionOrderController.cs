@@ -21,7 +21,7 @@ namespace WebApplication5.Controllers
         [HttpPost]
         public ActionResult LoadPozition(int? id)
         {
-            IEnumerable<Pozition> result = Enumerable.Empty<Pozition>();
+            var result = Enumerable.Empty<PozitionOrder>();
             if (id.HasValue)
             {
                 result = pozition.GetPozition(id.Value);
@@ -30,9 +30,9 @@ namespace WebApplication5.Controllers
         }
 
         [HttpPost]
-        public void DeletePozition(int idOrder, int idPozition)
+        public void DeletePozition(int id)
         {
-            pozition.DeletePozition(idOrder, idPozition);
+            pozition.DeletePozition(id);
         }
 
         [HttpPost]

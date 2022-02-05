@@ -148,6 +148,7 @@
     <Compile Include="Infrastructure\Entity\Order.cs" />
     <Compile Include="Infrastructure\Entity\Pozition.cs" />
     <Compile Include="Infrastructure\Entity\PozitionFree.cs" />
+    <Compile Include="Infrastructure\Entity\PozitionOrder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

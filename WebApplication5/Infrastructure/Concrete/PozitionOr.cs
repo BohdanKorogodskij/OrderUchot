@@ -13,24 +13,24 @@ namespace WebApplication5.Infrastructure.Concrete
     public class PozitionOr : IPozitionOr
     {
         private readonly string connectionString = ConfigurationManager.ConnectionStrings["Dbconnection"].ConnectionString;
-        public IEnumerable<Pozition> GetPozition(int id)
+        public IEnumerable<PozitionOrder> GetPozition(int id)
         {
-            var result = Enumerable.Empty<Pozition>();
+            var result = Enumerable.Empty<PozitionOrder>();
             try
             {
                 using (var connection = new SqlConnection(connectionString))
                 {
                     connection.Open();
                     string query = $@"
-                            SELECT 
-                                pozition.ID, 
-                                pozition.NameProduct, 
-                                pozition.Price, 
-                                pozition.NumberProduct, 
-                                pozition.Cost 
-                            FROM PozitionOrder pozition
-                                JOIN Linker link ON pozition.ID = link.IDpozitionOrder
-                                WHERE link.IDorderList = {id}
+                                    select 
+                                        pozition.ID,
+                                        poz.NameProduct,
+                                        poz.Price,
+                                        pozition.NumberProduct,
+                                        pozition.Cost
+                                    from PozitionOrder pozition
+                                        left join Pozition poz ON pozition.IDpozition = poz.ID
+                                WHERE pozition.IDorder = {id}
                         ";
                     using (var command = new SqlCommand(string.Empty, connection))
                     {
@@ -41,7 +41,7 @@ namespace WebApplication5.Infrastructure.Concrete
                         {
                             while(read.Read())
                             {
-                                var obj = new Pozition
+                                var obj = new PozitionOrder
                                 {
                                     ID = read.GetInt32(0),
                                     NameProduct = read.GetString(1),
@@ -61,14 +61,14 @@ namespace WebApplication5.Infrastructure.Concrete
             return result;
         }
 
-        public void DeletePozition(int idOrder, int idPozition)
+        public void DeletePozition(int id)
         {
             try
             {
                 using (var connection = new SqlConnection(connectionString))
                 {
                     connection.Open();
-                    string query = $"DELETE TOP (1) FROM [Linker] WHERE IDorderList = {idOrder} AND IDpozitionOrder = {idPozition}";
+                    string query = $"DELETE FROM [PozitionOrder] WHERE ID = {id}";
                     using (var command = new SqlCommand(string.Empty, connection))
                     {
                         command.CommandType = CommandType.Text;
@@ -97,7 +97,7 @@ namespace WebApplication5.Infrastructure.Concrete
                                 pozition.ID, 
                                 pozition.NameProduct, 
                                 pozition.Price
-                            FROM PozitionOrder pozition
+                            FROM Pozition pozition
                         ";
                     using (var command = new SqlCommand(string.Empty, connection))
                     {

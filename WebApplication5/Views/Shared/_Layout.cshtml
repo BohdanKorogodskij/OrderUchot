@@ -73,13 +73,12 @@
         });
     }
 
-    function DeletePozition(IDorder, IDpozition) {
+    function DeletePozition(IDorder, IDpozitionOrder) {
         $.ajax({
             type: "POST",
             url: "@Url.Action("DeletePozition", "PozitionOrder")",
             data: {
-                idOrder: IDorder,
-                idPozition: IDpozition
+                id: IDpozitionOrder
             },
             success: function (response) {
                 $('#Order').DataTable().ajax.reload();
@@ -90,8 +89,6 @@
     }
 
     function AddPozition(IDorder, IDpozition) {
-        console.log(IDorder);
-        console.log(IDpozition);
         $.ajax({
             type: "POST",
             url: "@Url.Action("AddPozition", "PozitionOrder")",
@@ -168,7 +165,7 @@
             }
         });
     }
-    function ChangeNumberProduct(idPozition) {
+    function ChangeNumberProduct(idPozition, idOrder) {
         $.ajax({
             type: "POST",
             url: "@Url.Action("ChangeNumberProduct", "PozitionOrder")",
@@ -177,10 +174,10 @@
                 numberProduct: $("#idPozitionNumberProduct" + idPozition).val()
             },
             success: function (response) {
-                @*$('#Order').DataTable().ajax.reload();
+                /*$('#Order').DataTable().ajax.reload();*/
                 var tablePozition = $('#Pozition').DataTable();
                 tablePozition.ajax.url("@Url.Action("LoadPozition", "PozitionOrder")?id=" + idOrder).load();
-                $('#FreePozition').DataTable().ajax.reload();*@
+                /*$('#FreePozition').DataTable().ajax.reload();*/
             }
         });
     }

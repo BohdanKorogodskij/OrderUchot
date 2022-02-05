@@ -87,7 +87,7 @@
                 {
                     "data": "NumberProduct", "name": "Количество", "autoWidth": true,
                     "render": function (data, type, full, meta) {
-                        return "<input id='idPozitionNumberProduct" + full.ID + "' onchange=ChangeNumberProduct('" + full.ID + "'); value='" + full.NumberProduct + "'></input>";
+                        return "<input id='idPozitionNumberProduct" + full.ID + "' onchange=ChangeNumberProduct('" + full.ID + "','@Model.ID'); value='" + full.NumberProduct + "'></input>";
                     }
                 },
                 { "data": "Cost", "name": "Стоимость", "autoWidth": true },

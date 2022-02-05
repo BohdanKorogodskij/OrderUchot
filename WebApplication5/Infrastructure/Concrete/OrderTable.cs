@@ -23,14 +23,12 @@ namespace WebApplication5.Infrastructure.Concrete
                 using (var connection = new SqlConnection(connectionString))
                 {
                     connection.Open();
-                    string query = @"SELECT 
-                                        list.[ID]
-                                        ,list.[DateOrder]
-                                        ,list.[FIO]
-	                                    ,ISNULL(SUM(poz.Cost), 0) as SumOrder
-                                    FROM [OrderList] list
-                                        LEFT JOIN Linker link ON list.ID = link.IDorderList
-                                        LEFT JOIN PozitionOrder poz ON link.IDpozitionOrder = poz.ID
+                    string query = @"select
+                                        list.ID
+                                        ,list.DateOrder
+                                        ,list.FIO
+                                        ,ISNULL(SUM(list.CostOrder), 0) AS CostOrder
+                                    from OrderList list
                                     GROUP BY list.ID, 
                                         list.DateOrder,
                                         list.FIO
@@ -49,7 +47,7 @@ namespace WebApplication5.Infrastructure.Concrete
                                     ID = read.GetInt32(0),
                                     DateOrder = read.GetDateTime(1),
                                     FIO = read.GetString(2),
-                                    SumOrder = (double)read.GetDecimal(3)
+                                    CostOrder = (double)read.GetDecimal(3)
                                 };
                                 result = result.Concat(new[] { obj });
                             }
@@ -63,14 +61,14 @@ namespace WebApplication5.Infrastructure.Concrete
             return result;
         }
 
-        public void Add(Entity.Order order)
+        public void Add(Order order)
         {
             try
             {
                 using (var connection = new SqlConnection(connectionString))
                 {
                     connection.Open();
-                    string query = $"INSERT INTO [OrderList] (DateOrder, FIO) VALUES('{order.DateOrder.ToString("yyyy-MM-dd")}', '{order.FIO}')";
+                    string query = $"INSERT INTO [OrderList] (DateOrder, FIO, CostOrder) VALUES('{order.DateOrder.ToString("yyyy-MM-dd")}', '{order.FIO}', 0)";
                     using (var command = new SqlCommand(string.Empty, connection))
                     {
                         command.CommandType = CommandType.Text;
@@ -107,7 +105,7 @@ namespace WebApplication5.Infrastructure.Concrete
             }
         }
 
-        public void Edit(Entity.Order order)
+        public void Edit(Order order)
         {
             try
             {
@@ -131,7 +129,7 @@ namespace WebApplication5.Infrastructure.Concrete
             }
         }
 
-        public Entity.Order GetOrder(int id)
+        public Order GetOrder(int id)
         {
             IEnumerable<Order> result = Enumerable.Empty<Order>();
             try
@@ -143,10 +141,8 @@ namespace WebApplication5.Infrastructure.Concrete
                                         list.[ID]
                                         ,list.[DateOrder]
                                         ,list.[FIO]
-	                                    ,ISNULL(SUM(poz.Cost), 0) as SumOrder
+	                                    ,ISNULL(SUM(list.CostOrder), 0) as CostOrder
                                     FROM [OrderList] list
-                                        LEFT JOIN Linker link ON list.ID = link.IDorderList
-                                        LEFT JOIN PozitionOrder poz ON link.IDpozitionOrder = poz.ID
                                     WHERE list.ID = {id}
                                     GROUP BY list.ID, 
                                         list.DateOrder,
@@ -166,7 +162,7 @@ namespace WebApplication5.Infrastructure.Concrete
                                     ID = read.GetInt32(0),
                                     DateOrder = read.GetDateTime(1),
                                     FIO = read.GetString(2),
-                                    SumOrder = (double)read.GetDecimal(3)
+                                    CostOrder = (double)read.GetDecimal(3)
                                 };
                                 result = result.Concat(new[] { obj });
                             }
@@ -189,18 +185,18 @@ namespace WebApplication5.Infrastructure.Concrete
                 using (var connection = new SqlConnection(connectionString))
                 {
                     connection.Open();
-                    string query = $@"SELECT 
-                                        list.[ID]
-                                        ,list.[DateOrder]
-                                        ,list.[FIO]
-	                                    ,ISNULL(SUM(poz.Cost), 0) as SumOrder
-                                    FROM [OrderList] list
-                                        LEFT JOIN Linker link ON list.ID = link.IDorderList
-                                        LEFT JOIN PozitionOrder poz ON link.IDpozitionOrder = poz.ID
-                                    WHERE DateOrder BETWEEN '{from.ToString("yyyy-MM-dd")}' AND '{to.ToString("yyyy-MM-dd")}'
-                                    GROUP BY list.ID, 
-                                        list.DateOrder,
-                                        list.FIO";
+                    string query = $@"
+                                        SELECT 
+                                            list.[ID]
+                                            ,list.[DateOrder]
+                                            ,list.[FIO]
+	                                        ,ISNULL(SUM(list.CostOrder), 0) as CostOrder
+                                        FROM [OrderList] list
+                                        WHERE DateOrder BETWEEN '{from.ToString("yyyy-MM-dd")}' AND '{to.ToString("yyyy-MM-dd")}'
+                                        GROUP BY list.ID, 
+                                            list.DateOrder,
+                                            list.FIO
+";
                     using (var command = new SqlCommand(string.Empty, connection))
                     {
                         command.CommandType = CommandType.Text;
@@ -215,7 +211,7 @@ namespace WebApplication5.Infrastructure.Concrete
                                     ID = read.GetInt32(0),
                                     DateOrder = read.GetDateTime(1),
                                     FIO = read.GetString(2),
-                                    SumOrder = (double)read.GetDecimal(3)
+                                    CostOrder = (double)read.GetDecimal(3)
                                 };
                                 result = result.Concat(new[] { obj });
                             }
