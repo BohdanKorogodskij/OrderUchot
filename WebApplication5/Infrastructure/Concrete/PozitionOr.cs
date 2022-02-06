@@ -22,14 +22,14 @@ namespace WebApplication5.Infrastructure.Concrete
                 {
                     connection.Open();
                     string query = $@"
-                                    select 
+                                    SELECT 
                                         pozition.ID,
                                         poz.NameProduct,
                                         poz.Price,
                                         pozition.NumberProduct,
                                         pozition.Cost
-                                    from PozitionOrder pozition
-                                        left join Pozition poz ON pozition.IDpozition = poz.ID
+                                    FROM PozitionOrder pozition
+                                        LEFT JOIN Pozition poz ON pozition.IDpozition = poz.ID
                                 WHERE pozition.IDorder = {id}
                         ";
                     using (var command = new SqlCommand(string.Empty, connection))
@@ -207,7 +207,6 @@ namespace WebApplication5.Infrastructure.Concrete
                 {
                     connection.Open();
                     string query = $@"
-
                                     DECLARE @CostOrder MONEY
 	                                    SELECT
 	                                    @CostOrder = ISNULL(SUM(pozOrder.Cost), 0)

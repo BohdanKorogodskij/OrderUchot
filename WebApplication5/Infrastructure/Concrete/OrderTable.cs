@@ -23,12 +23,12 @@ namespace WebApplication5.Infrastructure.Concrete
                 using (var connection = new SqlConnection(connectionString))
                 {
                     connection.Open();
-                    string query = @"select
+                    string query = @"SELECT
                                         list.ID
                                         ,list.DateOrder
                                         ,list.FIO
                                         ,ISNULL(SUM(list.CostOrder), 0) AS CostOrder
-                                    from OrderList list
+                                    FROM OrderList list
                                     GROUP BY list.ID, 
                                         list.DateOrder,
                                         list.FIO
@@ -185,8 +185,7 @@ namespace WebApplication5.Infrastructure.Concrete
                 using (var connection = new SqlConnection(connectionString))
                 {
                     connection.Open();
-                    string query = $@"
-                                        SELECT 
+                    string query = $@"  SELECT 
                                             list.[ID]
                                             ,list.[DateOrder]
                                             ,list.[FIO]
