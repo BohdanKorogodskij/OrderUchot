@@ -104,6 +104,49 @@
             }
         });
     }
+    function AddPozitionNew(IDorder, IDpozition) {
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("AddPozition", "PozitionOrder")",
+            data: {
+                idOrder: IDorder,
+                idPozition: IDpozition
+            },
+            success: function (response) {
+                var tablePozition = $('#PozitionAdd').DataTable();
+                tablePozition.ajax.url("@Url.Action("LoadPozition", "PozitionOrder")?id=" + IDorder).load();
+            }
+        });
+    }
+
+    function DeletePozitionNew(IDorder, IDpozitionOrder) {
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("DeletePozition", "PozitionOrder")",
+            data: {
+                id: IDpozitionOrder
+            },
+            success: function (response) {
+                var tablePozition = $('#PozitionAdd').DataTable();
+                tablePozition.ajax.url("@Url.Action("LoadPozition", "PozitionOrder")?id=" + IDorder).load();
+            }
+        });
+    }
+    function ChangeNumberProductNew(idPozition, idOrder) {
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("ChangeNumberProduct", "PozitionOrder")",
+            data: {
+                idPozition: idPozition,
+                numberProduct: $("#idPozitionAddNumberProduct" + idPozition).val(),
+                idOrder: idOrder
+            },
+            success: function (response) {
+                var tablePozition = $('#PozitionAdd').DataTable();
+                tablePozition.ajax.url("@Url.Action("LoadPozition", "PozitionOrder")?id=" + idOrder).load();
+            }
+        });
+    }
 
     $("#SaveEdit").click(function () {
         var editID = $("#editID").val();

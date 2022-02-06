@@ -67,7 +67,8 @@ namespace WebApplication5.Controllers
         [HttpGet]
         public ActionResult Add(Order order)
         {
-            table.Add(order);
+            var id = table.Add(order);
+            order.ID = id;
             return View(order);
         }
         

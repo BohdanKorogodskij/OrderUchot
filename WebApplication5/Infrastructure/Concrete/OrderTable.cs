@@ -61,26 +61,35 @@ namespace WebApplication5.Infrastructure.Concrete
             return result;
         }
 
-        public void Add(Order order)
+        public int Add(Order order)
         {
+            int result = 0;
             try
             {
                 using (var connection = new SqlConnection(connectionString))
                 {
                     connection.Open();
-                    string query = $"INSERT INTO [OrderList] (DateOrder, FIO, CostOrder) VALUES('{order.DateOrder.ToString("yyyy-MM-dd")}', '{order.FIO}', 0)";
+                    string query = $@"INSERT INTO [OrderList] (DateOrder, FIO, CostOrder) 
+                                        OUTPUT Inserted.ID VALUES('{order.DateOrder.ToString("yyyy-MM-dd")}', '{order.FIO}', 0)";
                     using (var command = new SqlCommand(string.Empty, connection))
                     {
                         command.CommandType = CommandType.Text;
                         command.CommandText = query;
                         command.CommandTimeout = int.MaxValue;
-                        var result = command.ExecuteNonQuery();
+                        //var result = command.ExecuteNonQuery();
+                        using (IDataReader reader = command.ExecuteReader())
+                        {
+                            reader.Read();
+                            var insertedID = (int)reader["ID"];
+                            result = insertedID;
+                        }
                     }
                 }
             }catch(Exception ex)
             {
 
             }
+            return result;
         }
 
         public void Delete(int id)

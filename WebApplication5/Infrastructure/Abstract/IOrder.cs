@@ -10,7 +10,7 @@ namespace WebApplication5.Infrastructure.Abstract
     public interface IOrder
     {
         IEnumerable<Order> GetListTable();
-        void Add(Order order);
+        int Add(Order order);
         void Delete(int id);
         void Edit(Order order);
         Order GetOrder(int id);
