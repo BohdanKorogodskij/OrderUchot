@@ -145,7 +145,7 @@
             var addDate = $("#addDate").val();
             var addFIO = $("#addFIO").val();
 
-            $.ajax({
+            @*$.ajax({
                 type: "POST",
                 url: "@Url.Action("Add", "Home")",
                 data: {
@@ -157,7 +157,8 @@
                     var table = $('#Order').DataTable();
                     table.ajax.url("@Url.Action("LoadTable", "Home")").load();
                 }
-            });
+            });*@
+            window.location.href = '@Url.Action("Add", "Home")'+'/?DateOrder=' + addDate + '&FIO=' + addFIO + '&SumOrder=' + 0;
         });
 
 
@@ -172,7 +173,7 @@
 
 
 
-        
+
 
     })
 </script>

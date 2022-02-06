@@ -50,6 +50,8 @@ namespace WebApplication5.Controllers
             return View(order);
         }
 
+        
+
         [HttpPost]
         public void DeleteTable(int id)
         {
@@ -62,10 +64,11 @@ namespace WebApplication5.Controllers
             table.Edit(order);
         }
 
-        [HttpPost]
-        public void Add(Order order)
+        [HttpGet]
+        public ActionResult Add(Order order)
         {
             table.Add(order);
+            return View(order);
         }
         
         [HttpPost]
