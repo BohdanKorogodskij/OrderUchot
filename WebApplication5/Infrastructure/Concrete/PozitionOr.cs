@@ -347,25 +347,6 @@ namespace WebApplication5.Infrastructure.Concrete
             }
         }
 
-        private double GetDouble(object obj)
-        {
-            double result = 0D;
-            if (double.TryParse(obj.ToString(), out result))
-            {
-                return result;
-            }
-            return result;
-        }
-
-        private DateTime GetDateTime(object obj)
-        {
-            var result = new DateTime();
-            if (DateTime.TryParse(obj.ToString(), out result))
-            {
-                return result;
-            }
-            return result;
-        }
 
         private int GetInt(object obj)
         {
