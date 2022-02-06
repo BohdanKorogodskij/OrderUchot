@@ -44,33 +44,11 @@
 <script>
     var DateFrom;
     var DateTo;
+    //id выбранного заказа
     var IDClickedOrder;
 
-    //изменение FIO в таб. #Order
-    function ChangeFIO(idOrder) {
-        $.ajax({
-            type: "POST",
-            url: "@Url.Action("ChangeFIO", "Home")",
-            data: {
-                idOrder: idOrder,
-                fio: $("#idOrderFIO" + idOrder).val()
-            },
-            success: function (response) {
-                $('#Order').DataTable().ajax.reload();
-            }
-        });
-    }
-    function Delete(ID) {
-        $.ajax({
-            type: "POST",
-            url: "@Url.Action("DeleteTable", "Home")",
-            data: {
-                ID: ID
-            },
-            success: function (response) {
-                $('#Order').DataTable().ajax.reload();
-            }
-        });
+    function TestT(e) {
+        console.log(e.target.value);
     }
 
     function DeletePozition(IDorder, IDpozitionOrder) {
@@ -81,7 +59,6 @@
                 id: IDpozitionOrder
             },
             success: function (response) {
-                $('#Order').DataTable().ajax.reload();
                 var tablePozition = $('#Pozition').DataTable();
                 tablePozition.ajax.url("@Url.Action("LoadPozition", "PozitionOrder")?id=" + IDorder).load();
             }
@@ -97,9 +74,7 @@
                 idPozition: IDpozition
             },
             success: function (response) {
-                $('#Order').DataTable().ajax.reload();
                 var tablePozition = $('#Pozition').DataTable();
-                //tablePozition.ajax.reload();
                 tablePozition.ajax.url("@Url.Action("LoadPozition", "PozitionOrder")?id=" + IDorder).load();
             }
         });
@@ -132,13 +107,13 @@
             }
         });
     }
-    function ChangeNumberProductNew(idPozition, idOrder) {
+    function ChangeNumberProductNew(e, idPozition, idOrder) {
         $.ajax({
             type: "POST",
             url: "@Url.Action("ChangeNumberProduct", "PozitionOrder")",
             data: {
                 idPozition: idPozition,
-                numberProduct: $("#idPozitionAddNumberProduct" + idPozition).val(),
+                numberProduct: e.target.value,
                 idOrder: idOrder
             },
             success: function (response) {
@@ -176,46 +151,46 @@
     }
 
     //изменение ячеек в таб. #FreePozition
-    function ChangeNameProduct(idOrder, idPozition) {
+    function ChangeNameProduct(e, idOrder, idPozition) {
         $.ajax({
             type: "POST",
             url: "@Url.Action("ChangeNameProduct", "PozitionOrder")",
             data: {
                 idPozition: idPozition,
-                nameProduct: $("#idFreePozitionNameProduct" + idPozition).val()
+                nameProduct: e.target.value
             },
             success: function (response) {
-                $('#Order').DataTable().ajax.reload();
+                //$('#Order').DataTable().ajax.reload();
                 var tablePozition = $('#Pozition').DataTable();
                 tablePozition.ajax.url("@Url.Action("LoadPozition", "PozitionOrder")?id=" + idOrder).load();
                 $('#FreePozition').DataTable().ajax.reload();
             }
         });
     }
-    function ChangePrice(idOrder, idPozition) {
+    function ChangePrice(e, idOrder, idPozition) {
         $.ajax({
             type: "POST",
             url: "@Url.Action("ChangePrice", "PozitionOrder")",
             data: {
                 idPozition: idPozition,
-                price: $("#idFreePozitionPrice" + idPozition).val(),
+                price: e.target.value,
                 idOrder: idOrder
             },
             success: function (response) {
-                $('#Order').DataTable().ajax.reload();
+                //$('#Order').DataTable().ajax.reload();
                 var tablePozition = $('#Pozition').DataTable();
                 tablePozition.ajax.url("@Url.Action("LoadPozition", "PozitionOrder")?id=" + idOrder).load();
                 $('#FreePozition').DataTable().ajax.reload();
             }
         });
     }
-    function ChangeNumberProduct(idPozition, idOrder) {
+    function ChangeNumberProduct(e, idPozition, idOrder) {
         $.ajax({
             type: "POST",
             url: "@Url.Action("ChangeNumberProduct", "PozitionOrder")",
             data: {
                 idPozition: idPozition,
-                numberProduct: $("#idPozitionNumberProduct" + idPozition).val(),
+                numberProduct: e.target.value,
                 idOrder: idOrder
             },
             success: function (response) {
@@ -226,7 +201,7 @@
             }
         });
     }
-    function ChangeCost(idOrder, idPozition) {
+    @*function ChangeCost(idOrder, idPozition) {
         $.ajax({
             type: "POST",
             url: "@Url.Action("ChangeCost", "PozitionOrder")",
@@ -241,5 +216,5 @@
                 $('#FreePozition').DataTable().ajax.reload();
             }
         });
-    }
+    }*@
 </script>

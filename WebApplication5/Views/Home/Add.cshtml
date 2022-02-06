@@ -77,7 +77,7 @@
                 {
                     "data": "NumberProduct", "name": "Количество", "autoWidth": true,
                     "render": function (data, type, full, meta) {
-                        return "<input id='idPozitionAddNumberProduct" + full.ID + "' onchange=ChangeNumberProductNew('" + full.ID + "','@Model.ID'); value='" + full.NumberProduct + "'></input>";
+                        return "<input id='idPozitionAddNumberProduct" + full.ID + "' onchange=ChangeNumberProductNew(event,'" + full.ID + "','@Model.ID'); value='" + full.NumberProduct + "'></input>";
                     }
                 },
                 { "data": "Cost", "name": "Стоимость", "autoWidth": true },
@@ -127,7 +127,6 @@
             ]
         });
         function LoadTable() {
-            console.log(@Model.ID);
             var tablePozition = $("#PozitionAdd").DataTable();
             tablePozition.ajax.url("@Url.Action("LoadPozition", "PozitionOrder")?id=" + @Model.ID).load();
         }

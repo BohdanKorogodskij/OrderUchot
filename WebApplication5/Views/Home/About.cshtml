@@ -8,7 +8,7 @@
 <input id="addDate" type="date" value="" />
 <br />
 <p>ФИО Клиента</p>
-<input id="addFIO" value="" />
+<input id="addFIO" onchange="TestT(event)" value="" />
 <br>
 @*<p>общая сумма заказа</p>
 <input id="addSumOrder" value="" />*@
@@ -93,7 +93,7 @@
             return datestring;
         }
 
-        var tableOrder = $("#Order").DataTable({
+        $("#Order").DataTable({
             processing: true,
             serverSide: true,
             filter: true,
@@ -116,7 +116,7 @@
                 {
                     "data": "FIO", "name": "ФИО Клиента", "autoWidth": true,
                     "render": function (data, type, full, meta) {
-                        return "<input id='idOrderFIO" + full.ID + "' onchange=ChangeFIO('" + full.ID + "'); value='" + full.FIO + "'></input>";
+                        return "<input id='idOrderFIO" + full.ID + "' onchange=ChangeFIO(event,'" + full.ID + "'); value='" + full.FIO + "'></input>";
                     }
                 },
                 { "data": "CostOrder", "name": "общая сумма заказа", "autoWidth": true },
@@ -144,20 +144,6 @@
         $("#Add").click(function () {
             var addDate = $("#addDate").val();
             var addFIO = $("#addFIO").val();
-
-            @*$.ajax({
-                type: "POST",
-                url: "@Url.Action("Add", "Home")",
-                data: {
-                    DateOrder: addDate,
-                    FIO: addFIO,
-                    SumOrder: 0
-                },
-                success: function (response) {
-                    var table = $('#Order').DataTable();
-                    table.ajax.url("@Url.Action("LoadTable", "Home")").load();
-                }
-            });*@
             window.location.href = '@Url.Action("Add", "Home")'+'/?DateOrder=' + addDate + '&FIO=' + addFIO + '&SumOrder=' + 0;
         });
 
@@ -166,14 +152,35 @@
             var table = $("#Order").DataTable();
             table.ajax.url("@Url.Action("LoadTable", "Home")?from=" + DateFrom + "&to=" + DateTo).load();
         });
-
-
-
-
-
-
-
-
-
     })
+
+    //изменение ФИО в заказе
+    function ChangeFIO(e, idOrder) {
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("ChangeFIO", "Home")",
+            data: {
+                idOrder: idOrder,
+                fio: e.target.value
+            },
+            success: function (response) {
+                $('#Order').DataTable().ajax.reload();
+            }
+        });
+    }
+
+    //удаление заказа из таб #Order
+    function Delete(ID) {
+        console.log("check delete");
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("DeleteTable", "Home")",
+            data: {
+                ID: ID
+            },
+            success: function (response) {
+                $('#Order').DataTable().ajax.reload();
+            }
+        });
+    }
 </script>

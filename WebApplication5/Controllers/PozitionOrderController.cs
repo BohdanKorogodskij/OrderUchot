@@ -69,10 +69,10 @@ namespace WebApplication5.Controllers
             pozition.CalculateCost(idPozition, idOrder);
         }
 
-        [HttpPost]
-        public void ChangeCost(int idPozition, double cost)
-        {
-            pozition.ChangeCost(idPozition, cost);
-        }
+        //[HttpPost]
+        //public void ChangeCost(int idPozition, double cost)
+        //{
+        //    pozition.ChangeCost(idPozition, cost);
+        //}
     }
 }
