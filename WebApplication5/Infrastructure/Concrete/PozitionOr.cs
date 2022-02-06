@@ -43,11 +43,11 @@ namespace WebApplication5.Infrastructure.Concrete
                             {
                                 var obj = new PozitionOrder
                                 {
-                                    ID = read.GetInt32(0),
-                                    NameProduct = read.GetString(1),
-                                    Price = read.GetDecimal(2),
-                                    NumberProduct = read.GetInt32(3),
-                                    Cost = read.GetDecimal(4)
+                                    ID = GetInt(read["ID"]),
+                                    NameProduct = GetString(read["NameProduct"]),
+                                    Price = GetDecimal(read["Price"]),
+                                    NumberProduct = GetInt(read["NumberProduct"]),
+                                    Cost = GetDecimal(read["Cost"])
                                 };
                                 result = result.Concat(new[] { obj });
                             }
@@ -110,9 +110,9 @@ namespace WebApplication5.Infrastructure.Concrete
                             {
                                 var obj = new PozitionFree
                                 {
-                                    ID = read.GetInt32(0),
-                                    NameProduct = read.GetString(1),
-                                    Price = read.GetDecimal(2)
+                                    ID = GetInt(read["ID"]),
+                                    NameProduct = GetString(read["NameProduct"]),
+                                    Price = GetDecimal(read["Price"])
                                 };
                                 result = result.Concat(new[] { obj });
                             }
@@ -345,6 +345,59 @@ namespace WebApplication5.Infrastructure.Concrete
             {
 
             }
+        }
+
+        private double GetDouble(object obj)
+        {
+            double result = 0D;
+            if (double.TryParse(obj.ToString(), out result))
+            {
+                return result;
+            }
+            return result;
+        }
+
+        private DateTime GetDateTime(object obj)
+        {
+            var result = new DateTime();
+            if (DateTime.TryParse(obj.ToString(), out result))
+            {
+                return result;
+            }
+            return result;
+        }
+
+        private int GetInt(object obj)
+        {
+            var result = 0;
+            if (int.TryParse(obj.ToString(), out result))
+            {
+                return result;
+            }
+            return result;
+        }
+
+        private decimal GetDecimal(object obj)
+        {
+            var result = 0M;
+            if(decimal.TryParse(obj.ToString(), out result))
+            {
+                return result;
+            }
+            return result;
+        }
+
+        private string GetString(object obj)
+        {
+            var result = string.Empty;
+            try
+            {
+                result = obj.ToString();
+            }catch(Exception)
+            {
+                return string.Empty;
+            }
+            return result;
         }
     }
 }

@@ -44,10 +44,10 @@ namespace WebApplication5.Infrastructure.Concrete
                             {
                                 var obj = new Order
                                 { 
-                                    ID = read.GetInt32(0),
-                                    DateOrder = read.GetDateTime(1),
-                                    FIO = read.GetString(2),
-                                    CostOrder = (double)read.GetDecimal(3)
+                                    ID = GetInt(read["ID"]),
+                                    DateOrder = GetDateTime(read["DateOrder"]),
+                                    FIO = GetString(read["FIO"]),
+                                    CostOrder = GetDouble(read["CostOrder"])
                                 };
                                 result = result.Concat(new[] { obj });
                             }
@@ -76,11 +76,10 @@ namespace WebApplication5.Infrastructure.Concrete
                         command.CommandType = CommandType.Text;
                         command.CommandText = query;
                         command.CommandTimeout = int.MaxValue;
-                        //var result = command.ExecuteNonQuery();
                         using (IDataReader reader = command.ExecuteReader())
                         {
                             reader.Read();
-                            var insertedID = (int)reader["ID"];
+                            var insertedID = GetInt(reader["ID"]);
                             result = insertedID;
                         }
                     }
@@ -168,10 +167,10 @@ namespace WebApplication5.Infrastructure.Concrete
                             {
                                 var obj = new Order
                                 {
-                                    ID = read.GetInt32(0),
-                                    DateOrder = read.GetDateTime(1),
-                                    FIO = read.GetString(2),
-                                    CostOrder = (double)read.GetDecimal(3)
+                                    ID = GetInt(read["ID"]),
+                                    DateOrder = GetDateTime(read["DateOrder"]),
+                                    FIO = GetString(read["FIO"]),
+                                    CostOrder = GetDouble(read["CostOrder"])
                                 };
                                 result = result.Concat(new[] { obj });
                             }
@@ -216,10 +215,10 @@ namespace WebApplication5.Infrastructure.Concrete
                             {
                                 var obj = new Order
                                 {
-                                    ID = read.GetInt32(0),
-                                    DateOrder = read.GetDateTime(1),
-                                    FIO = read.GetString(2),
-                                    CostOrder = (double)read.GetDecimal(3)
+                                    ID = GetInt(read["ID"]),
+                                    DateOrder = GetDateTime(read["DateOrder"]),
+                                    FIO = GetString(read["FIO"]),
+                                    CostOrder = GetDouble(read["CostOrder"])
                                 };
                                 result = result.Concat(new[] { obj });
                             }
@@ -255,6 +254,50 @@ namespace WebApplication5.Infrastructure.Concrete
             {
 
             }
+        }
+
+        private double GetDouble(object obj)
+        {
+            double result = 0D;
+            if(double.TryParse(obj.ToString(), out result))
+            {
+                return result;
+            }
+            return result;
+        }
+
+        private DateTime GetDateTime(object obj)
+        {
+            var result = new DateTime();
+            if(DateTime.TryParse(obj.ToString(), out result))
+            {
+                return result;
+            }
+            return result;
+        }
+
+        private int GetInt(object obj)
+        {
+            var result = 0;
+            if(int.TryParse(obj.ToString(), out result))
+            {
+                return result;
+            }
+            return result;
+        }
+
+        private string GetString(object obj)
+        {
+            var result = string.Empty;
+            try
+            {
+                result = obj.ToString();
+            }
+            catch (Exception)
+            {
+                return string.Empty;
+            }
+            return result;
         }
     }
 }
