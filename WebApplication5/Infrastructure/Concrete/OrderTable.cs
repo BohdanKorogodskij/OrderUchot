@@ -29,9 +29,9 @@ namespace WebApplication5.Infrastructure.Concrete
                                         ,list.FIO
                                         ,ISNULL(SUM(list.CostOrder), 0) AS CostOrder
                                     FROM OrderList list
-                                    GROUP BY list.ID, 
-                                        list.DateOrder,
-                                        list.FIO
+                                        GROUP BY list.ID, 
+                                            list.DateOrder,
+                                            list.FIO
                                 ";
                     using (var command = new SqlCommand(string.Empty, connection))
                     {
@@ -143,10 +143,10 @@ namespace WebApplication5.Infrastructure.Concrete
                                         ,list.[FIO]
 	                                    ,ISNULL(SUM(list.CostOrder), 0) as CostOrder
                                     FROM [OrderList] list
-                                    WHERE list.ID = {id}
-                                    GROUP BY list.ID, 
-                                        list.DateOrder,
-                                        list.FIO
+                                        WHERE list.ID = {id}
+                                        GROUP BY list.ID, 
+                                            list.DateOrder,
+                                            list.FIO
 ";
                     using (var command = new SqlCommand(string.Empty, connection))
                     {
@@ -191,10 +191,10 @@ namespace WebApplication5.Infrastructure.Concrete
                                             ,list.[FIO]
 	                                        ,ISNULL(SUM(list.CostOrder), 0) as CostOrder
                                         FROM [OrderList] list
-                                        WHERE DateOrder BETWEEN '{from.ToString("yyyy-MM-dd")}' AND '{to.ToString("yyyy-MM-dd")}'
-                                        GROUP BY list.ID, 
-                                            list.DateOrder,
-                                            list.FIO
+                                            WHERE DateOrder BETWEEN '{from.ToString("yyyy-MM-dd")}' AND '{to.ToString("yyyy-MM-dd")}'
+                                            GROUP BY list.ID, 
+                                                list.DateOrder,
+                                                list.FIO
 ";
                     using (var command = new SqlCommand(string.Empty, connection))
                     {

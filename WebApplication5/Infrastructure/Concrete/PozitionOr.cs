@@ -209,14 +209,14 @@ namespace WebApplication5.Infrastructure.Concrete
                     string query = $@"
                                     DECLARE @CostOrder MONEY
 	                                    SELECT
-	                                    @CostOrder = ISNULL(SUM(pozOrder.Cost), 0)
+	                                        @CostOrder = ISNULL(SUM(pozOrder.Cost), 0)
 	                                    FROM OrderList list
 	                                    LEFT JOIN PozitionOrder pozOrder ON list.ID = pozOrder.IDorder
-	                                    WHERE list.ID = {idOrder}
+	                                        WHERE list.ID = {idOrder}
 
                                     UPDATE list SET CostOrder = @CostOrder
                                        FROM OrderList list
-                                       WHERE list.ID = {idOrder}
+                                            WHERE list.ID = {idOrder}
                                     ";
                     using (var command = new SqlCommand(string.Empty, connection))
                     {
