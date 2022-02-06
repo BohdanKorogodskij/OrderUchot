@@ -212,7 +212,7 @@ namespace WebApplication5.Infrastructure.Concrete
 	                                    SELECT
 	                                    @CostOrder = ISNULL(SUM(pozOrder.Cost), 0)
 	                                    FROM OrderList list
-	                                    LEFT JOIN PozitionORder pozOrder ON list.ID = pozOrder.IDorder
+	                                    LEFT JOIN PozitionOrder pozOrder ON list.ID = pozOrder.IDorder
 	                                    WHERE list.ID = {idOrder}
 
                                     UPDATE list SET CostOrder = @CostOrder
@@ -309,27 +309,6 @@ namespace WebApplication5.Infrastructure.Concrete
                     string query = $@"UPDATE pozition SET NumberProduct = {numberProduct}
                                          FROM [PozitionOrder] pozition
                                             WHERE ID = {idPozition}
-
-
-
-                                    declare @Cost money,
-		                                    @CostOrder money
-
-		                                    select 
-			                                    @Cost = poz.Price * pozOrder.NumberProduct
-			                                    from PozitionOrder pozOrder
-			                                    left join Pozition poz ON pozOrder.IDpozition = poz.ID
-			                                    where pozOrder.ID = {idPozition}
-
-                                    update poz set Cost = @Cost from PozitionOrder poz Where ID = {idPozition}
-
-                                            select 
-			                                    @CostOrder = ISNULL(SUM(pozOrder.Cost), 0)
-			                                    from PozitionOrder pozOrder
-			                                    left join OrderList list ON pozOrder.IDorder = list.ID
-			                                    where list.ID = {idOrder}
-
-                                    update pozOrder SEt CostOrder = @CostOrder from OrderList pozOrder where ID = {idOrder}
                                     ";
                     using (var command = new SqlCommand(string.Empty, connection))
                     {
