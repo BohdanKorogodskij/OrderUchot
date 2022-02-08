@@ -370,15 +370,13 @@ namespace WebApplication5.Infrastructure.Concrete
 
         private string GetString(object obj)
         {
-            var result = string.Empty;
-            try
-            {
-                result = obj.ToString();
-            }catch(Exception)
+            if(obj == null)
             {
                 return string.Empty;
+            } else
+            {
+                return obj.ToString();
             }
-            return result;
         }
     }
 }
