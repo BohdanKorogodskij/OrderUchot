@@ -54,7 +54,7 @@ namespace WebApplication5.Infrastructure.Concrete
                         }
                     }
                 }
-            }catch(Exception ex)
+            }catch(Exception)
             {
 
             }
@@ -84,7 +84,7 @@ namespace WebApplication5.Infrastructure.Concrete
                         }
                     }
                 }
-            }catch(Exception ex)
+            }catch(Exception)
             {
 
             }
@@ -107,7 +107,7 @@ namespace WebApplication5.Infrastructure.Concrete
                         var result = command.ExecuteNonQuery();
                     }
                 }
-            }catch(Exception ex)
+            }catch(Exception)
             {
 
             }
@@ -131,7 +131,7 @@ namespace WebApplication5.Infrastructure.Concrete
                         var result = command.ExecuteNonQuery();
                     }
                 }
-            }catch(Exception ex)
+            }catch(Exception)
             {
 
             }
@@ -178,7 +178,7 @@ namespace WebApplication5.Infrastructure.Concrete
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
 
             }
@@ -225,7 +225,7 @@ namespace WebApplication5.Infrastructure.Concrete
                         }
                     }
                 }
-            }catch(Exception ex)
+            }catch(Exception)
             {
 
             }
@@ -250,7 +250,7 @@ namespace WebApplication5.Infrastructure.Concrete
                         var result = command.ExecuteNonQuery();
                     }
                 }
-            }catch(Exception ex)
+            }catch(Exception)
             {
 
             }
